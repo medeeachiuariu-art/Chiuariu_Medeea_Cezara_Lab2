@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:Chiuariu_Medeea_Cezara_Lab2Context"
+    }
+  }
+}
