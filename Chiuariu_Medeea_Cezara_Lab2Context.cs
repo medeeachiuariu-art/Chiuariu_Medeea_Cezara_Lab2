@@ -8,4 +8,5 @@ public class Chiuariu_Medeea_Cezara_Lab2Context(
 
     public DbSet<Chiuariu_Medeea_Cezara_Lab2.Models.Publisher> Publisher { get; set; } = default!;
     public DbSet<Chiuariu_Medeea_Cezara_Lab2.Models.Authors> Authors { get; set; } = default!;
+    public DbSet<Chiuariu_Medeea_Cezara_Lab2.Models.Category> Category { get; set; } = default!;
 }

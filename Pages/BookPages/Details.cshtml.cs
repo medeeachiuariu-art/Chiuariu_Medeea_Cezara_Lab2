@@ -8,6 +8,7 @@ namespace Chiuariu_Medeea_Cezara_Lab2.Pages.BookPages;
 public class DetailsModel : PageModel
 {
     private readonly Chiuariu_Medeea_Cezara_Lab2Context _context;
+
     public DetailsModel(Chiuariu_Medeea_Cezara_Lab2Context context)
     {
         _context = context;
@@ -17,23 +18,24 @@ public class DetailsModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        if (id is null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var book = await _context.Book
-  .Include(b => b.Author)
-  .Include(b => b.Publisher)
-  .FirstOrDefaultAsync(m => m.ID == id);
-        if (book is null)
+            .Include(b => b.Author)
+            .Include(b => b.Publisher)
+            .Include(b => b.BookCategories)
+                .ThenInclude(b => b.Category)
+            .FirstOrDefaultAsync(m => m.ID == id);
+
+        if (book == null)
         {
             return NotFound();
         }
-        else
-        {
-            Book = book;
-        }
+
+        Book = book;
 
         return Page();
     }
