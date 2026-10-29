@@ -10,23 +10,42 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-
 <form method="get">
     <label asp-for="AuthorID">Author</label>
+
     <select asp-for="AuthorID" asp-items="Model.AuthorsList">
         <option value="">Toți autorii</option>
     </select>
+
     <button type="submit" class="btn btn-primary">Filtrează</button>
 </form>
+<form asp-page="./Index" method="get">
+    <input type="hidden" name="AuthorID" value="@Model.AuthorID" />
 
+    <div class="form-actions no-color">
+        <p>
+            Find by Book Title / Author Name:
+            <input type="text"
+                   name="SearchString"
+                   value="@Model.CurrentFilter" />
+
+            <input type="submit"
+                   value="Search"
+                   class="btn btn-primary" /> |
+
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Book[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Book[0].Author)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TitleSort"
+                    asp-route-AuthorID="@Model.AuthorID"
+                   asp-route-searchString="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Book[0].Title)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Book[0].Price)
@@ -34,8 +53,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Book[0].PublishingDate)
             </th>
+            <th colspan="2">
+                <a asp-page="./Index" asp-route-sortOrder="@Model.AuthorSort"
+                    asp-route-AuthorID="@Model.AuthorID"
+                   asp-route-searchString="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Book[0].Author)
+                </a>
+            </th>
             <th>
-                @Html.DisplayNameFor(model => model.Book[0].Publisher.PublisherName)
+                @Html.DisplayNameFor(model => model.Book[0].Publisher)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Book[0].BookCategories)
@@ -58,14 +84,16 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Author.FirstName)
-                    @Html.DisplayFor(modelItem => item.Author.LastName)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PublishingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.LastName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Publisher.PublisherName)

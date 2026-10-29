@@ -16,19 +16,22 @@ public class IndexModel : PageModel
     }
 
     public IList<Book> Book { get; set; } = default!;
-
     public BookData BookD { get; set; } = default!;
 
     public int BookID { get; set; }
-
     public int CategoryID { get; set; }
+
+    public string TitleSort { get; set; } = "";
+    public string AuthorSort { get; set; } = "";
+    public string CurrentFilter { get; set; } = "";
 
     public SelectList AuthorsList { get; set; } = default!;
 
     [BindProperty(SupportsGet = true)]
     public int? AuthorID { get; set; }
 
-    public async Task OnGetAsync(int? id, int? categoryID)
+    public async Task OnGetAsync(
+          int? id, int? categoryID, string? sortOrder, string? searchString)
     {
         AuthorsList = new SelectList(
             await _context.Authors
@@ -42,25 +45,31 @@ public class IndexModel : PageModel
 
         BookD = new BookData();
 
-        var books = _context.Book
-            .Include(b => b.Publisher)
+        TitleSort = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+        AuthorSort = sortOrder == "author" ? "author_desc" : "author";
+        CurrentFilter = searchString ?? "";
+
+        BookD.Books = await _context.Book
             .Include(b => b.Author)
+            .Include(b => b.Publisher)
             .Include(b => b.BookCategories)
                 .ThenInclude(b => b.Category)
             .AsNoTracking()
-            .AsQueryable();
-
-        if (AuthorID.HasValue)
-        {
-            books = books.Where(b => b.AuthorID == AuthorID.Value);
-        }
-
-        Book = await books
             .OrderBy(b => b.Title)
             .ToListAsync();
 
-        BookD.Books = Book;
-
+        if (AuthorID.HasValue)
+        {
+            BookD.Books = BookD.Books
+                .Where(b => b.AuthorID == AuthorID.Value);
+        }
+if (!String.IsNullOrEmpty(searchString))
+{
+    BookD.Books = BookD.Books.Where(s =>
+        s.Author.FirstName.Contains(searchString)
+        || s.Author.LastName.Contains(searchString)
+        || s.Title.Contains(searchString));
+}
         if (id != null)
         {
             BookID = id.Value;
@@ -71,8 +80,33 @@ public class IndexModel : PageModel
             if (book != null)
             {
                 BookD.Categories = book.BookCategories
-                    .Select(b => b.Category);
+                    .Select(s => s.Category);
             }
         }
+
+        switch (sortOrder)
+        {
+            case "title_desc":
+                BookD.Books = BookD.Books
+                    .OrderByDescending(s => s.Title);
+                break;
+
+            case "author_desc":
+                BookD.Books = BookD.Books
+                    .OrderByDescending(s => s.Author?.FullName);
+                break;
+
+            case "author":
+                BookD.Books = BookD.Books
+                    .OrderBy(s => s.Author?.FullName);
+                break;
+
+            default:
+                BookD.Books = BookD.Books
+                    .OrderBy(s => s.Title);
+                break;
+        }
+
+        Book = BookD.Books.ToList();
     }
 }
