@@ -1,8 +1,8 @@
+using Chiuariu_Medeea_Cezara_Lab2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Chiuariu_Medeea_Cezara_Lab2.Models;
 
 namespace Chiuariu_Medeea_Cezara_Lab2.Pages.BookPages;
 
@@ -63,13 +63,13 @@ public class IndexModel : PageModel
             BookD.Books = BookD.Books
                 .Where(b => b.AuthorID == AuthorID.Value);
         }
-if (!String.IsNullOrEmpty(searchString))
-{
-    BookD.Books = BookD.Books.Where(s =>
-        s.Author.FirstName.Contains(searchString)
-        || s.Author.LastName.Contains(searchString)
-        || s.Title.Contains(searchString));
-}
+        if (!String.IsNullOrEmpty(searchString))
+        {
+            BookD.Books = BookD.Books.Where(s =>
+                s.Author.FirstName.Contains(searchString)
+                || s.Author.LastName.Contains(searchString)
+                || s.Title.Contains(searchString));
+        }
         if (id != null)
         {
             BookID = id.Value;

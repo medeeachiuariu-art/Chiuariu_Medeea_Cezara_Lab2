@@ -1,7 +1,6 @@
+using Chiuariu_Medeea_Cezara_Lab2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Chiuariu_Medeea_Cezara_Lab2.Models;
 
 namespace Chiuariu_Medeea_Cezara_Lab2.Pages.PublisherPages;
 
