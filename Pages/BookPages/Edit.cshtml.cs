@@ -2,9 +2,10 @@ using Chiuariu_Medeea_Cezara_Lab2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 namespace Chiuariu_Medeea_Cezara_Lab2.Pages.BookPages;
 
+[Authorize(Roles = "Admin")]
 public class EditModel : BookCategoriesPageModel
 {
     private readonly Chiuariu_Medeea_Cezara_Lab2Context _context;

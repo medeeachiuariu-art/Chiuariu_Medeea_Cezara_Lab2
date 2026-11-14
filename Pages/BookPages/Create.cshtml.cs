@@ -1,9 +1,10 @@
 using Chiuariu_Medeea_Cezara_Lab2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace Chiuariu_Medeea_Cezara_Lab2.Pages.BookPages;
 
+[Authorize(Roles = "Admin")]
 public class CreateModel : BookCategoriesPageModel
 {
     private readonly Chiuariu_Medeea_Cezara_Lab2Context _context;

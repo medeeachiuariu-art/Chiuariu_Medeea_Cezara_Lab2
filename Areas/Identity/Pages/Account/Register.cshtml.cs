@@ -117,6 +117,8 @@ public class RegisterModel : PageModel
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
+
                 var member = new Member
                 {
                     Email = Input.Email
